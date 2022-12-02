@@ -473,7 +473,7 @@
         <Settings>
             <DataItem>
                 <Key>Url</Key>
-                <Value>https://lansweeper.example.com</Value>
+                <Value>[LANSWEEPER-URL-PLACEHOLDER]</Value>
             </DataItem>
         </Settings>
     </LsAgentConfigItem>

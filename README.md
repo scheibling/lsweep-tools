@@ -3,8 +3,8 @@ Lansweeper scanning tools (Agent Proxy, Mock Sender, Mock Receiver)
 
 ## Todo
 - [x] Add communication documentation w/ examples
-- [ ] Add mock receiver
-- [ ] Add mock sender
+- [x] Add mock receiver
+- [x] Add mock sender
 - [ ] Add agent proxy
 
 ## Background
@@ -21,6 +21,19 @@ Simple tool that can send mock agent reports to the LANSweeper server for fictio
 
 ### Mock Receiver (mocksweeper/server.py)
 In case you want to test the communication from agent to server, this tool impersonates the agent data receiver (normally) on port 9524. Mainly to illustrate the communication, has not been tested for production use.
+
+#### Usage
+```bash
+# Install prerequisites
+pip3 install -r requirements.txt
+
+# Run the mock server
+# The hostname is used to tell the client which host to connect to
+python3 server.py hostname.internal.com 8011
+
+# Server will listen on 0.0.0.0 by default
+```
+
 
 ## General communication info
 ### Request base
@@ -72,6 +85,9 @@ Hello
 #### Response
 ```html
 HTTP/2 200 OK
+Server: Microsoft-HTTPAPI/2.0
+
+OK
 ```
 
 ### 2. Action: AssetStatus
@@ -122,6 +138,7 @@ HTTP/2 200 OK
 
 Content-Type: multipart/form-data; boundary=----------abcdefghijklmnopqrstuvwxyz
 Content-Length: 123
+Server: Microsoft-HTTPAPI/2.0
 
 ```
 
@@ -180,6 +197,7 @@ HTTP/2 200 OK
 
 Content-Type: multipart/form-data; boundary=----------abcdefghijklmnopqrstuvwxyz
 Content-Length: 123
+Server: Microsoft-HTTPAPI/2.0
 ```
 
 ##### Body
@@ -291,4 +309,8 @@ Content-Type: application/octet-stream
 #### Response
 ```
 HTTP/2 200 OK
+
+Server: Microsoft-HTTPAPI/2.0
+
+OK
 ```
