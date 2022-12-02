@@ -1,3 +1,4 @@
 mocksweeper/.venv
 mocksweeper/*.log
 *.log
+lsweep-agent-proxy/*debug*
