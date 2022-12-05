@@ -1,0 +1,16 @@
+version: "3.2"
+services:
+  proxy:
+    container_name: lsweep-proxy
+    build: .
+    ports:
+      - "8011:8011"
+    environment:
+      - DEBUG="true"
+      # - LISTEN=""
+      # - PUBLIC_PORT="8011"
+      # - LISTEN_HOSTNAME="lsagent.example.com"
+      # - LSSERVER_HOST="lansweeper.example.com"
+      # - LSSERVER_PORT="9524"
+      # - LSSERVER_CERT=""
+      # - LSSERVER_IGNORE_CERT=""

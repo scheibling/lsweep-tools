@@ -5,7 +5,7 @@ Lansweeper scanning tools (Agent Proxy, Mock Sender, Mock Receiver)
 - [x] Add communication documentation w/ examples
 - [x] Add mock receiver
 - [x] Add mock sender
-- [ ] Add agent proxy
+- [x] Add agent proxy
 
 ## Background
 We have a couple of assets that are separated network-wise from our Lansweeper server which we wanted to scan, but since the cloud relay is US-based that wasn't an option for us. This led us to a dive into the communication between agent and server, which is described below.
@@ -15,6 +15,38 @@ We have a couple of assets that are separated network-wise from our Lansweeper s
 Simple relay that sits between the Lansweeper agent and the server. Will generally only forward intercepted traffic with one major exception - when the agent sends a config request the last part of the response from Lansweeper will be altered to have the traffic go through the proxy instead of trying to call the server directly.
 
 The agent proxy is writen in go, and currently has no SSL support so will need to be run behind a reverse proxy (e.g. nginx, haproxy) that can handle SSL termination.
+
+#### Installation and Configuration (Docker)
+1. Clone the repo or get the docker image from scheibling/lsagentproxy:latest and build the image (cd lsweep-agent-proxy && docker build -t lsagentproxy:local .)
+2. Start a container and specify settings as env-variables (see more below)
+
+#### Installation and Configuration (Docker Compose)
+1. Clone the repo and modify the settings in docker-compose.yml
+2. Start the container with docker-compose up -d
+
+#### Installation and Configuration (Binary)
+1. Download the binary from the releases page
+2. Create a config file (see options below)
+3. Run the binary with the .env file in the same folder
+
+#### Installation and Configuration (Dev)
+1. Clone the repo
+2. Create a config file (see options below)
+3. Run go mod download
+4. Start with go run main.go
+
+#### Env Variables
+| Variable | Description | Default |
+| --- | --- | --- |
+| DEBUG | Enable debug logging | false |
+| LISTEN | Address to listen on. Empty by default, which listens on all interfaces | |
+| LISTEN_PORT | The port to listen on. Not used for the Docker image (always 8011), use the -p flag or ports secton in docker-compose.yml instead | 8011 |
+| PUBLIC_DOMAIN | The DNS name of the server where the proxy is running, eg. lsagentproxy.example.com (NOT the Lansweeper server URL) | |
+| PUBLIC_PORT | The port agents use to connect to the proxy, default is same as LISTEN_PORT but this needs to be changed when using a reverse proxy for SSL |
+| LSSERVER_HOST | The host of the Lansweeper Server | lansweeper.example.com |
+| LSSERVER_PORT | The port on the Lansweeper Server used for Agent scanning |
+| LSSERVER_CERT | (Not yet implemented) Certificate/CA chain to use to verify Lansweeper Server Certificate | |
+| LSSERVER_IGNORE_CERT | Ignore certificate errors when connecting to Lansweeper Server | true |
 
 ### Mock Sender (mocksweeper/agent.py)
 Simple tool that can send mock agent reports to the LANSweeper server for fictional machines. Mainly there to illustrate the communication, has not been tested for production use.
