@@ -24,7 +24,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "lsweep-agent-proxy.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -33,17 +32,32 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: "DEBUG"
+              value: {{ .Values.applicationSettings.debug | quote}}
+            - name: "PUBLIC_DOMAIN"
+              value: {{ .Values.applicationSettings.publicDomain | quote }}
+            - name: "PUBLIC_PORT"
+              value: {{ .Values.applicationSettings.publicPort | quote }}
+            - name: LSSERVER_HOST
+              value: {{ .Values.applicationSettings.lansweeper.server | quote }}
+            - name: LSSERVER_PORT
+              value: {{ .Values.applicationSettings.lansweeper.port | quote }}
+            - name: LSSERVER_CERT
+              value: {{ .Values.applicationSettings.lansweeper.certificate | quote }}
+            - name: LSSERVER_IGNORE_CERT
+              value: {{ .Values.applicationSettings.lansweeper.ignoreCertErrors | quote }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8011
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /ctstatus
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /ctstatus
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

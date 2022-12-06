@@ -2,8 +2,9 @@
 replicaCount: 1
 
 image:
-  repository: nginx
+  repository: cloudyne.azurecr.io/lsweep/agent-proxy:latest
   pullPolicy: IfNotPresent
+  
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
@@ -11,59 +12,78 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+#
 
-podAnnotations: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+applicationSettings:
+  # Activate debug logging
+  debug: "false"
+  
+  # The publicDomain should be the external DNS name the agent proxy is reachable on.
+  # this is normally the same as the host in the ingress configuration.
+  # If your ingress listens on a non-standard port, change the publicPort below
+  publicDomain: "lsagentproxy.example.com"
+  publicPort: "443"
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  # Connection settings for the LANSweeper Server
+  lansweeper:
+    # The DNS name or IP that the LANSweeper server is listening on
+    server: "lansweeper.example.com"
+    
+    # This is the agent listen port, not the main webserver
+    port: "9524"
+
+    # Certificate for verification (not implemented)
+    certificate: ""
+
+    # Ignore certificate errors
+    ignoreCertErrors: "true"
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8011
 
+
+# podAnnotations: {}
+
+# podSecurityContext: {}
+#   # fsGroup: 2000
+
+securityContext:
+  readOnlyRootFilesystem: true
+  runasNonRoot: true
+  runAsUser: 1000
+
+
+# Configure ingress resource to add SSL Certificate
 ingress:
   enabled: false
   className: ""
   annotations: {}
+    # Use existing nginx ingress controller
     # kubernetes.io/ingress.class: nginx
+    # Get SSL Certificate via ACME/LE
     # kubernetes.io/tls-acme: "true"
+  # The external host name to access the proxy
   hosts:
-    - host: chart-example.local
+    - host: lsagentproxy.example.com
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls: []
-  #  - secretName: chart-example-tls
+  #  - secretName: manual-tls-secret
   #    hosts:
-  #      - chart-example.local
+  #      - lsagentproxy.example.com
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+
+# By default, resources are constricted since the image is small and light
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 autoscaling:
   enabled: false
