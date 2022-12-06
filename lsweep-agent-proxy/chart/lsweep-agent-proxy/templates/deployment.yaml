@@ -35,8 +35,8 @@ spec:
           env:
             - name: "DEBUG"
               value: {{ .Values.applicationSettings.debug | quote}}
-            - name: "PUBLIC_DOMAIN"
-              value: {{ .Values.applicationSettings.publicDomain | quote }}
+            - name: "LISTEN_HOSTNAME"
+              value: {{ .Values.applicationSettings.publicDomain | quote}}
             - name: "PUBLIC_PORT"
               value: {{ .Values.applicationSettings.publicPort | quote }}
             - name: LSSERVER_HOST

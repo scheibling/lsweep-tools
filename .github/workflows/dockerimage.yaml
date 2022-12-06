@@ -8,7 +8,7 @@ on:
 jobs:
   docker:
     env:
-      VERSION_NUMBER: "0.2.3"
+      VERSION_NUMBER: "0.2.4"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
