@@ -7,6 +7,8 @@ on:
 
 jobs:
   docker:
+    env:
+      VERSION_NUMBER: "0.2.3"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,6 +25,12 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      
       - name: Build image and push to cloudyne.azurecr.io
         uses: docker/build-push-action@v2
         with:
@@ -30,7 +38,14 @@ jobs:
           push: true
           tags: |
             cloudyne.azurecr.io/lsweep/agent-proxy:latest
-            cloudyne.azurecr.io/lsweep/agent-proxy:0.2.0
+            cloudyne.azurecr.io/lsweep/agent-proxy:${{ env.VERSION_NUMBER }}
       
+      - name: Publish to Docker Hub
+        run: |
+          docker tag cloudyne.azurecr.io/lsweep/agent-proxy:latest cloudyne/lsweep-agent-proxy:latest
+          docker tag cloudyne.azurecr.io/lsweep/agent-proxy:${{ env.VERSION_NUMBER }} cloudyne/lsweep-agent-proxy:${{ env.VERSION_NUMBER }}
+          docker push cloudyne/lsweep-agent-proxy:latest
+          docker push cloudyne/lsweep-agent-proxy:${{ env.VERSION_NUMBER }}
+
       - name: Output digest
         run: echo ${{ steps.buildx.outputs.digest }}

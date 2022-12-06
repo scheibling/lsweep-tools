@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  repository: cloudyne.azurecr.io/lsweep/agent-proxy:latest
+  repository: cloudyne/lsweep-agent-proxy
   pullPolicy: IfNotPresent
   
   # Overrides the image tag whose default is the chart appVersion.
