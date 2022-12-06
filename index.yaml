@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  lsweep-agent-proxy:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2022-12-06T11:10:31.976780783Z"
+    description: Helm chart for the LSweep Agent Proxy service
+    digest: 4d7011e8703ef474d16088823156de06c207a65a5c18bc10d32d978e74d653a3
+    name: lsweep-agent-proxy
+    type: application
+    urls:
+    - https://github.com/scheibling/lsweep-tools/releases/download/lsweep-agent-proxy-0.2.1/lsweep-agent-proxy-0.2.1.tgz
+    version: 0.2.1
+generated: "2022-12-06T11:10:31.976796383Z"
