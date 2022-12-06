@@ -51,7 +51,7 @@ service:
 
 securityContext:
   readOnlyRootFilesystem: true
-  runasNonRoot: true
+  runAsNonRoot: true
   runAsUser: 1000
 
 
