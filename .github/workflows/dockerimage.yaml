@@ -30,7 +30,7 @@ jobs:
           push: true
           tags: |
             cloudyne.azurecr.io/lsweep/agent-proxy:latest
-            cloudyne.azurecr.io/lsweep/agent-proxy:${{ github.sha }}
+            cloudyne.azurecr.io/lsweep/agent-proxy:0.2.0
       
       - name: Output digest
         run: echo ${{ steps.buildx.outputs.digest }}
