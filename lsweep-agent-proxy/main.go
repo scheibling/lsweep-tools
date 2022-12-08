@@ -254,6 +254,21 @@ func setConfiguration() {
 		LSServerCert:       tryGetEnv("LSSERVER_CERT", ""),
 		LSServerIgnoreCert: tryGetEnv("LSSERVER_IGNORE_CERT", "false") == "true",
 	}
+
+	if config.Debug {
+		fmt.Println("Configuration:")
+		fmt.Println("  Debug:", config.Debug)
+		fmt.Println("  Listen:", config.Listen)
+		fmt.Println("  ListenPort:", config.ListenPort)
+		fmt.Println("  PublicPort:", config.PublicPort)
+		fmt.Println("  ListenHostname:", config.ListenHostname)
+		fmt.Println("  LSServerHost:", config.LSServerHost)
+		fmt.Println("  LSServerPort:", config.LSServerPort)
+		fmt.Println("  LSServerCert:", config.LSServerCert)
+		fmt.Println("  LSServerIgnoreCert:", config.LSServerIgnoreCert)
+	} else {
+		fmt.Println("Configuration loaded, debugging not enabled. Use DEBUG=true to enable more extensive logging")
+	}
 }
 
 func main() {

@@ -4,3 +4,4 @@ mocksweeper/*.log
 lsweep-agent-proxy/*debug*
 lsweep-agent-proxy/.env
 lsweep-agent-proxy/*test.yml
+mocksweeper/magento.py

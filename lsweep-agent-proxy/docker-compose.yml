@@ -2,7 +2,9 @@ version: "3.2"
 services:
   proxy:
     container_name: lsweep-proxy
-    build: .
+    image: cloudyne/lsweep-agent-proxy
+    # In case you want to build yourself
+    # build: .
     ports:
       - "8011:8011"
     environment:
